@@ -26,45 +26,73 @@ const particlesOptions = {
   },
 }
 
+let thisProxy;
+
 class App extends React.Component{
   constructor(){
     super();
     this.state = {
       input: '',
-      imageUrl: ''
+      imageUrl: '',
+      box: {      
+        top: '',
+        right: '',
+        bottom: '',
+        left: ''
+      }
     };
+    thisProxy = this;
   }
 
   onInputChange = (event) => {
     this.setState({input: event.target.value});
   }
 
+  calculateFaceLocation = (data) => {
+    const image = document.getElementById('inputImage');
+    const widthRatio = image.width / image.naturalWidth;
+    const heightRatio = image.height / image.naturalHeight;
+    return {
+      top: data.faceRectangle.top * heightRatio,
+      right: image.width - (data.faceRectangle.left + data.faceRectangle.width) * widthRatio,
+      bottom: image.height - (data.faceRectangle.top + data.faceRectangle.height) * heightRatio,
+      left: data.faceRectangle.left * widthRatio
+    };
+  }
+
+  displayFaceBox = (box) => {
+    this.setState({box: box})
+    console.log(box);
+  }
+
   onSubmit = () => {
     this.setState({imageUrl: this.state.input});
-    // stub.PostModelOutputs(
-    //   {
-    //       // This is the model ID of a publicly available General model. You may use any other public or custom model ID.
-    //       model_id: "aaa03c23b3724a16a56b629203edc62c",
-    //       inputs: [{data: {image: {url: "https://samples.clarifai.com/dog2.jpeg"}}}]
-    //   },
-    //   metadata,
-    //   (err, response) => {
-    //     if (err) {
-    //         console.log("Error: " + err);
-    //         return;
-    //     }
 
-    //     if (response.status.code !== 10000) {
-    //         console.log("Received failed status: " + response.status.description + "\n" + response.status.details);
-    //         return;
-    //     }
+    //Api
+    try{
+      const data = JSON.stringify({
+        "url": this.state.input
+      });
 
-    //     console.log("Predicted concepts, with confidence values:")
-    //     for (const c of response.outputs[0].data.concepts) {
-    //         console.log(c.name + ": " + c.value);
-    //     }
-    //   }
-    // );
+      const xhr = new XMLHttpRequest();
+      xhr.withCredentials = true;
+
+      xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === this.DONE) {
+          const response = JSON.parse(this.responseText);
+          thisProxy.displayFaceBox( thisProxy.calculateFaceLocation(response[0]) );
+        }
+      });
+
+      xhr.open("POST", "https://microsoft-face1.p.rapidapi.com/detect?returnFaceId=true&recognitionModel=recognition_01&returnFaceLandmarks=true&detectionModel=detection_01&returnFaceAttributes=age");
+      xhr.setRequestHeader("content-type", "application/json");
+      xhr.setRequestHeader("x-rapidapi-key", "43cff4f655mshb124a92a2258973p1b3f34jsn77f7956973fe");
+      xhr.setRequestHeader("x-rapidapi-host", "microsoft-face1.p.rapidapi.com");
+
+      xhr.send(data);
+    }catch(err){
+      console.log("sth went wrong!");
+    }
   }
 
   render(){
@@ -75,7 +103,7 @@ class App extends React.Component{
         <Logo />
         <Rank />
         <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
-        <FaceRecognition imageUrl={this.state.imageUrl}/>
+        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl}/>
       </>
     );
   }

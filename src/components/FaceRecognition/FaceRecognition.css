@@ -3,22 +3,36 @@
 	justify-content: center;
 	align-items: center;
 	margin: 2em 0.5em;
+	padding: 0;
 }
 
-.fr-container > img {
+.fr-container > div {
+	position: relative;
+}
+
+#inputImage {
 	width: 450px;
 	height: auto;
 }
 
+.bounding-box {
+    position: absolute;
+    box-shadow: 0 0 0 3px #149df2 inset;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    cursor: pointer;
+}
+
 @media only screen and (max-width: 500px) {
-	.fr-container > img {
+	#inputImage {
 		width: 300px;
 		height: auto;
 	}
 }
 
 @media only screen and (max-width: 320px) {
-	.fr-container > img {
+	#inputImage {
 		width: 200px;
 		height: auto;
 	}
