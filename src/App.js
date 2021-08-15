@@ -34,12 +34,7 @@ class App extends React.Component{
     this.state = {
       input: '',
       imageUrl: '',
-      box: {      
-        top: '',
-        right: '',
-        bottom: '',
-        left: ''
-      }
+      boxes: []
     };
     thisProxy = this;
   }
@@ -60,9 +55,8 @@ class App extends React.Component{
     };
   }
 
-  displayFaceBox = (box) => {
-    this.setState({box: box})
-    console.log(box);
+  displayFaceBoxes = (boxes) => {
+    this.setState({boxes});
   }
 
   onSubmit = () => {
@@ -80,7 +74,9 @@ class App extends React.Component{
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
           const response = JSON.parse(this.responseText);
-          thisProxy.displayFaceBox( thisProxy.calculateFaceLocation(response[0]) );
+          console.log(response);
+          const boxes = response.map(item => thisProxy.calculateFaceLocation(item));
+          thisProxy.displayFaceBoxes(boxes);
         }
       });
 
@@ -103,7 +99,7 @@ class App extends React.Component{
         <Logo />
         <Rank />
         <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
-        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl}/>
+        <FaceRecognition boxes={this.state.boxes} imageUrl={this.state.imageUrl}/>
       </>
     );
   }
