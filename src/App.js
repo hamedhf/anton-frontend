@@ -86,8 +86,8 @@ class App extends React.Component{
     }
   }
 
-  onRouteChange = () => {
-    this.setState({route: 'home'});
+  onRouteChange = (route) => {
+    this.setState({route: route});
   }
 
   render(){
@@ -98,7 +98,7 @@ class App extends React.Component{
             <SignIn onRouteChange={this.onRouteChange}/>
           : 
           <>
-            <Navigation />
+            <Navigation onRouteChange={this.onRouteChange}/>
             <Logo />
             <Rank />
             <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>

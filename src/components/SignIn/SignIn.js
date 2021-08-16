@@ -8,7 +8,7 @@ const SignIn = ({onRouteChange}) => {
 		    <p>Welcome</p>
 		    <input type="email" placeholder="Email"/><br/>
 		    <input type="password" placeholder="Password"/><br/>
-		    <input type="button" value="Sign in" onClick={onRouteChange}/><br/>
+		    <input type="button" value="Sign in" onClick={() => onRouteChange('home')}/><br/>
 		    <a href="www.google.com">Register</a>
 		  </form>
 		</div>
