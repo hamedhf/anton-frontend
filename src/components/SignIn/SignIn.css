@@ -1,44 +1,6 @@
-/*.border{
-    border: 2px solid red;
-}
-
-.outer-container{
-    box-shadow: 0px 0px 20px rgb(68, 67, 67);
-    border-radius: 10px;
-    border: none;
-    padding: 1vw 2vw;
-}
-
-h3{
-    text-align: center;
-}
-
-.inner-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-label{
-    display: block;
-}
-
-input[type=submit]{
-    background-color: #3490e6;
-    border: none;
-    color: white;
-    padding: 8px 20px;
-    text-decoration: none;
-    margin: 4px 2px;
-    cursor: pointer;
-    align-self: stretch;
-    font-weight: bold;
-}*/
-
 .sn-container{
-    width: 100vw;
-    height: 100vh;
+  width: 100vw;
+  height: 100vh;
 }
 
 form {
@@ -54,7 +16,7 @@ form {
   position: relative;
   transition: all 0.2s ease-in-out;
 }
-form p {
+form > .si-title {
   font-weight: bold;
   color: black;
   opacity: 0.7;
@@ -63,15 +25,15 @@ form p {
   margin-bottom: 60px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
-form a {
+form > .si-register {
   text-decoration: none;
   color: black;
   font-size: 12px;
 }
-form a:hover {
-  text-shadow: 2px 2px 6px #00000040;
+form > .si-register:hover {
+  text-shadow: 2px 2px 2px #00000040;
 }
-form a:active {
+form > .si-register:active {
   text-shadow: none;
 }
 form input {
@@ -119,11 +81,11 @@ form:hover {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
 }
 
-form > a {
-    cursor: pointer;
+form > .si-register {
+  cursor: pointer;
 }
 
-a,
+.si-register,
 input:focus,
 select:focus,
 textarea:focus,

@@ -6,6 +6,7 @@ import Rank from './components/Rank/Rank';
 import Particles from 'react-particles-js';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import SignIn from './components/SignIn/SignIn';
+import Register from './components/Register/Register';
 import './App.css';
 
 const particlesOptions = {
@@ -91,20 +92,29 @@ class App extends React.Component{
   }
 
   render(){
+    let page;
+    if(this.state.route === 'signin') {
+      page = (<SignIn onRouteChange={this.onRouteChange}/>);
+    } 
+    else if(this.state.route === 'register'){
+      page = (<Register onRouteChange={this.onRouteChange}/>)
+    } 
+    else{
+      page = (
+              <>
+                <Navigation onRouteChange={this.onRouteChange}/>
+                <Logo />
+                <Rank />
+                <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
+                <FaceRecognition boxes={this.state.boxes} imageUrl={this.state.imageUrl}/>
+              </>
+            );  
+    }
+
     return (
       <>
         <Particles className='particles' params={particlesOptions} />
-        { this.state.route === 'signin' ? 
-            <SignIn onRouteChange={this.onRouteChange}/>
-          : 
-          <>
-            <Navigation onRouteChange={this.onRouteChange}/>
-            <Logo />
-            <Rank />
-            <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
-            <FaceRecognition boxes={this.state.boxes} imageUrl={this.state.imageUrl}/>
-          </>
-        }
+        {page}
       </>
     );
   }
