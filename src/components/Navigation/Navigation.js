@@ -1,10 +1,10 @@
 import React from 'react';
 import './Navigation.css';
 
-const Navigation = () => {
+const Navigation = ({onRouteChange}) => {
 	return(
 		<nav className='nav'>
-			<p className='sign-out'>Sign Out</p>
+			<p onClick={onRouteChange} className='sign-out'>Sign Out</p>
 		</nav>
 	);
 };

@@ -5,14 +5,8 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import Particles from 'react-particles-js';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
+import SignIn from './components/SignIn/SignIn';
 import './App.css';
-//import {ClarifaiStub, grpc} from 'clarifai-nodejs-grpc';
-
-//const stub = ClarifaiStub.grpc();
-
-// This will be used by every Clarifai endpoint call.
-//const metadata = new grpc.Metadata();
-//metadata.set("authorization", "Key {3427c2247db9410e88365ce36b50e1e7}");
 
 const particlesOptions = {
   particles: {
@@ -34,7 +28,8 @@ class App extends React.Component{
     this.state = {
       input: '',
       imageUrl: '',
-      boxes: []
+      boxes: [],
+      route: 'signin'
     };
     thisProxy = this;
   }
@@ -91,15 +86,25 @@ class App extends React.Component{
     }
   }
 
+  onRouteChange = () => {
+    this.setState({route: 'home'});
+  }
+
   render(){
     return (
       <>
         <Particles className='particles' params={particlesOptions} />
-        <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
-        <FaceRecognition boxes={this.state.boxes} imageUrl={this.state.imageUrl}/>
+        { this.state.route === 'signin' ? 
+            <SignIn onRouteChange={this.onRouteChange}/>
+          : 
+          <>
+            <Navigation />
+            <Logo />
+            <Rank />
+            <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
+            <FaceRecognition boxes={this.state.boxes} imageUrl={this.state.imageUrl}/>
+          </>
+        }
       </>
     );
   }
