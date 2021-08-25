@@ -5,6 +5,8 @@ import Register from './components/Register/Register';
 import Home from './components/Home/Home';
 import './App.css';
 
+const serverUrl = "https://salty-cliffs-46780.herokuapp.com";
+
 const particlesOptions = {
   particles: {
     number: {
@@ -44,13 +46,13 @@ class App extends React.Component{
   render(){
     let page;
     if(this.state.route === 'signin') {
-      page = (<SignIn onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>);
+      page = (<SignIn onRouteChange={this.onRouteChange} loadUser={this.loadUser} serverUrl={serverUrl}/>);
     } 
     else if(this.state.route === 'register'){
-      page = (<Register onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>)
+      page = (<Register onRouteChange={this.onRouteChange} loadUser={this.loadUser} serverUrl={serverUrl}/>)
     } 
     else if(this.state.route === 'home'){
-      page = (<Home onRouteChange={this.onRouteChange} user={this.state.user} loadUser={this.loadUser}/>);  
+      page = (<Home onRouteChange={this.onRouteChange} user={this.state.user} loadUser={this.loadUser} serverUrl={serverUrl}/>);  
     }
 
     return (

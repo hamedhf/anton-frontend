@@ -37,7 +37,7 @@ class Home extends React.Component{
     this.setState({imageUrl: this.state.input});
 
     //Api
-    fetch('http://localhost:3000/image', {
+    fetch(this.serverUrl + '/image', {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
