@@ -9,6 +9,7 @@ class Register extends React.Component{
 			email: '',
 			password: ''
 		};
+		this.serverUrl = this.props.serverUrl;
 	}
 
 	onNameChange = (event) =>{

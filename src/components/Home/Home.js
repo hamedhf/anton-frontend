@@ -13,6 +13,7 @@ class Home extends React.Component{
       imageUrl: '',
       boxes: []
     };
+    this.serverUrl = this.props.serverUrl;
   }
 
   onInputChange = (event) => {
