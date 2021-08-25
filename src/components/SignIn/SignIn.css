@@ -28,7 +28,7 @@ form > .si-title {
 form > .si-register {
   text-decoration: none;
   color: black;
-  font-size: 12px;
+  font-size: 1em;
 }
 form > .si-register:hover {
   text-shadow: 2px 2px 2px #00000040;
@@ -83,6 +83,7 @@ form:hover {
 
 form > .si-register {
   cursor: pointer;
+  margin-top: 0;
 }
 
 .si-register,
