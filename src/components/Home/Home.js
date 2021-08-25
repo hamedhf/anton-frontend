@@ -5,83 +5,84 @@ import ImageLinkForm from './../ImageLinkForm/ImageLinkForm';
 import Rank from './../Rank/Rank';
 import FaceRecognition from './../FaceRecognition/FaceRecognition';
 
-let thisProxy;
-
 class Home extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {
-          input: '',
-          imageUrl: '',
-          boxes: []
-        };
-        thisProxy = this;
-    }
+  constructor(props){
+    super(props);
+    this.state = {
+      input: '',
+      imageUrl: '',
+      boxes: []
+    };
+  }
 
-    onInputChange = (event) => {
-        this.setState({input: event.target.value});
-    }
+  onInputChange = (event) => {
+    this.setState({input: event.target.value});
+  }
 
-    displayFaceBoxes = (boxes) => {
-        this.setState({boxes});
-    }
+  calculateFaceLocation = (data) => {
+    const image = document.getElementById('inputImage');
+    return {
+      top: data.top_row * image.height,
+      right: image.width - data.right_col * image.width,
+      bottom: image.height - data.bottom_row * image.height ,
+      left: data.left_col * image.width
+    };
+  }
 
-    calculateFaceLocation = (data) => {
-        const image = document.getElementById('inputImage');
-        const widthRatio = image.width / image.naturalWidth;
-        const heightRatio = image.height / image.naturalHeight;
-        return {
-          top: data.faceRectangle.top * heightRatio,
-          right: image.width - (data.faceRectangle.left + data.faceRectangle.width) * widthRatio,
-          bottom: image.height - (data.faceRectangle.top + data.faceRectangle.height) * heightRatio,
-          left: data.faceRectangle.left * widthRatio
-        };
-    }
-    
+  displayFaceBoxes = (boxes) => {
+    this.setState({boxes});
+  }
 
-    onSubmit = () => {
-        this.setState({imageUrl: this.state.input});
-    
-        //Api
-        try{
-          const data = JSON.stringify({
-            "url": this.state.input
-          });
-    
-          const xhr = new XMLHttpRequest();
-          xhr.withCredentials = true;
-    
-          xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === this.DONE) {
-              const response = JSON.parse(this.responseText);
-              console.log(response);
-              const boxes = response.map(item => thisProxy.calculateFaceLocation(item));
-              thisProxy.displayFaceBoxes(boxes);
-            }
-          });
-    
-          xhr.open("POST", "https://microsoft-face1.p.rapidapi.com/detect?returnFaceId=true&recognitionModel=recognition_01&returnFaceLandmarks=true&detectionModel=detection_01&returnFaceAttributes=age");
-          xhr.setRequestHeader("content-type", "application/json");
-          xhr.setRequestHeader("x-rapidapi-key", "43cff4f655mshb124a92a2258973p1b3f34jsn77f7956973fe");
-          xhr.setRequestHeader("x-rapidapi-host", "microsoft-face1.p.rapidapi.com");
-    
-          xhr.send(data);
-        }catch(err){
-          console.log("sth went wrong!");
-        }
-    }
+  onSubmit = () => {
+    this.setState({imageUrl: this.state.input});
 
-    render(){
-        return(
-            <>
-                <Navigation onRouteChange={this.props.onRouteChange}/>
-                <Logo />
-                <Rank />
-                <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
-                <FaceRecognition boxes={this.state.boxes} imageUrl={this.state.imageUrl}/>
-            </>
-        );
-    }
+    //Api
+    fetch('http://localhost:3000/image', {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        imageUrl: this.state.input,
+        id: this.props.user.id
+      })
+    })
+    .then(res => {
+      if(res.status === 200){
+        return res.json();
+      }else{
+        throw new Error("failed to fetch boxes" + res.statusText);
+      }
+    })
+    .then(data =>{
+      const {id, name, email, joined} = this.props.user;
+      this.props.loadUser({
+        id,
+        name,
+        email,
+        entries: data.entries,
+        joined
+      });
+
+      let boxes = data.boxes.map(box => this.calculateFaceLocation(box));
+      this.displayFaceBoxes(boxes);
+    })
+    .catch(err => console.log(err));
+  }
+
+  render(){
+    const {name, entries} = this.props.user;
+    
+    return(
+      <>
+        <Navigation onRouteChange={this.props.onRouteChange}/>
+        <Logo />
+        <Rank name={name} entries={entries}/>
+        <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
+        <FaceRecognition boxes={this.state.boxes} imageUrl={this.state.imageUrl}/>
+      </>
+    );
+  }
 };
 
 export default Home;
