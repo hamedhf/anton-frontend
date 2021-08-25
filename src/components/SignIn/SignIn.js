@@ -7,8 +7,7 @@ class SignIn extends React.Component{
 		this.state = {
 			email: '',
 			password: ''
-    };
-		this.onRouteChange = this.props.onRouteChange;
+    	};
 	}
 
 	onEmailChange = (event) =>{
@@ -20,6 +19,11 @@ class SignIn extends React.Component{
 	}
 
 	logIn = () =>{
+		if(this.state.email === '' || this.state.password === ''){
+			alert("please fill all fields!");
+			return;
+		}
+
 		fetch('http://localhost:3000/signin', {
 			method: 'post',
 			headers: {'Content-Type': 'application/json'},
@@ -29,10 +33,10 @@ class SignIn extends React.Component{
 			})
 		})
 		.then(response => {
-			if(response.status === 400){
-				throw new Error('failed to sign in.' + response.statusText);
-			}else{
+			if(response.status === 200){
 				return response.json();
+			}else{
+				throw new Error('failed to sign in.' + response.statusText);
 			}
 		})
 		.then(user => {
@@ -49,8 +53,8 @@ class SignIn extends React.Component{
 			<div className="center sn-container">
 				<form >
 					<p className='si-title'>Welcome</p>
-					<input type="email" placeholder="Email" onChange={this.onEmailChange}/><br/>
-					<input type="password" placeholder="Password" onChange={this.onPasswordChange}/><br/>
+					<input type="email" placeholder="Email" onChange={this.onEmailChange} required/><br/>
+					<input type="password" placeholder="Password" onChange={this.onPasswordChange} required/><br/>
 					<input type="button" value="Sign in" onClick={this.logIn}/><br/>
 					<p className='si-register' onClick={() => onRouteChange('register')}>Register</p>
 				</form>

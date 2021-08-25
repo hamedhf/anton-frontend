@@ -47,7 +47,7 @@ class App extends React.Component{
       page = (<SignIn onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>);
     } 
     else if(this.state.route === 'register'){
-      page = (<Register onRouteChange={this.onRouteChange}/>)
+      page = (<Register onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>)
     } 
     else if(this.state.route === 'home'){
       page = (<Home onRouteChange={this.onRouteChange} user={this.state.user} loadUser={this.loadUser}/>);  
