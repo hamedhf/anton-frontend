@@ -68,7 +68,10 @@ class Home extends React.Component{
       let boxes = data.boxes.map(box => this.calculateFaceLocation(box));
       this.displayFaceBoxes(boxes);
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.log(err);
+      this.setState({boxes:[]});
+    });
   }
 
   render(){
